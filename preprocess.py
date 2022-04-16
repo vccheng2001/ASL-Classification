@@ -1,19 +1,46 @@
+import imghdr
 import cv2 as cv
 import numpy as np
 import string 
 import os
 
+
+''' 
+Histogram of Oriented Gradients
+------------------------------------
+To compute HOGs we create a histogram for each cell of an image patch
+and then normalize over the patch.
+'''
+def extract_HOG(img):
+
+    winSize = (28,28) # size of sliding window run across image 
+    blockSize = (16,16)
+    blockStride = (4,4)
+    cellSize = (16,16)
+    nbins = 9
+    # signedGradient=True
+
+    hog = cv.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nbins)
+
+    
+    hog_features = hog.compute(img)
+    return hog_features
+
+
+
+
 ''' Given an image, extract its contours '''
 def extract_contours(img):
     h, w, = img.shape 
 
-    src = cv.resize(img, dsize = (w*4,h*4))
+    # Resize (optional)
+    # img = cv.resize(img, dsize = (w*4,h*4))
 
-    # cv.imshow('img', src)
+    # cv.imshow('img', img)
     # cv.waitKey(0)
 
     # convert img into binary
-    _, bw = cv.threshold(src, 50, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)
+    _, bw = cv.threshold(img, 50, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)
     # calculating Contours
     contours, _ = cv.findContours(bw, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)
 
@@ -24,9 +51,9 @@ def extract_contours(img):
         if area < 1e2 or 1e5 < area:
             continue
         # Draw each contour only for visualisation purposes
-        cv.drawContours(src, contours, i, (0, 0, 255), 2)
+        cv.drawContours(img, contours, i, (0, 0, 255), 2)
          
-    cv.imshow('contours', src)
+    cv.imshow('contours', img)
     cv.waitKey(0)
 
 
