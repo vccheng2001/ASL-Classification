@@ -16,6 +16,11 @@
 data/
 ```
 
+## Dataset
+
+We use the [Hand Sign Images](https://www.kaggle.com/datasets/ash2703/handsignimages) dataset from Kaggle. This dataset contains 27,455 gray-scale images of size 28*28 pixels whose value range between 0-255. Each case represents a label (0-25) as a one-to-one map for each alphabetic letter A-Z (and no cases for 9=J or 25=Z because of gesture motions).
+
+
 ## Feature Extraction
 
 
