@@ -18,11 +18,10 @@ def extract_HOG(img):
 
     winSize = (28,28) # size of sliding window run across image 
     blockSize = (16,16) # block_size is the number of cells which fit in the patch
-    blockStride = (2,2)
-    cellSize = (4,4)  # cell_size is the size of the cells of the img patch over which to calculate the histograms
+    blockStride = (1,1)
+    cellSize = (8,8) # cell_size is the size of the cells of the img patch over which to calculate the histograms
     nbins = 9 # orientation bins
-    # signedGradient=True
-
+    # signedGradient=T
     hog = cv.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nbins)
 
     

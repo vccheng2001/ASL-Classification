@@ -61,7 +61,7 @@ plt.scatter(
     zorder=10,
 )
 plt.title(
-    "K-means clustering on the digits dataset (PCA-reduced data)\n"
+    "K-means clustering on the ASL dataset (PCA-reduced data)\n"
     "Centroids are marked with white cross"
 )
 plt.xlim(x_min, x_max)
