@@ -30,7 +30,6 @@ def extract_HOG(img):
 
 
 
-
 ''' Given an image, extract its contours '''
 def extract_contours(img):
     h, w, = img.shape 
@@ -57,6 +56,49 @@ def extract_contours(img):
          
     cv.imshow('contours', img)
     cv.waitKey(0)
+
+
+
+''' Given an image, extract its ORB Descriptions'''
+def extract_ORB(img):
+    # Check if grayscale; if not, then make it gray
+    if len(img.shape) > 2:
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    # Compute the descriptors and their keypoints
+    orb = cv.ORB_create()
+    keypoints, descriptors = orb.detectAndCompute(img, None)
+    return keypoints, descriptors
+
+
+
+''' Need to install the opencv-contrib-python library first'''
+def extract_SIFT(img):
+    # Check if grayscale; if not, then make it gray
+    if len(img.shape) > 2:
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    # Compute the descriptors and their keypoints
+    sift = cv.SIFT_create()
+    keypoints = sift.detectAndCompute(img, None)
+    return keypoints
+
+
+
+def extract_FAST(img):
+    # Check if grayscale; if not, then make it gray
+    if len(img.shape) > 2:
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    # Compute the descriptors and their keypoints
+    fast = cv.FastFeatureDetector_create()
+    keypoints = fast.detect(img, None)
+    return keypoints
+
+
+
+def extract_corners(img, num_corners=5,quality=0.01,min_dist=10):
+    if len(img.shape) > 2:
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    corners = cv.goodFeaturesToTrack(img, num_corners, quality, min_dist)
+    return corners
 
 
 
