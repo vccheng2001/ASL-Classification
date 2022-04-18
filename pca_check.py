@@ -19,6 +19,9 @@ if __name__ == "__main__":
     print(labels[1])
     print(recon_image)
 
+    plt.imshow(P[:, 1].reshape(28, 28), cmap='gray')
+    plt.show()
+
     plt.imshow(recon_image.reshape(28, 28), cmap='gray')
     plt.show()
 
