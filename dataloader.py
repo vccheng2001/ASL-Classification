@@ -4,7 +4,7 @@ import glob
 import string
 import cv2 
 import preprocess
-from preprocess import extract_HOG, extract_contours
+from preprocess import extract_HOG, extract_contours, extract_ORB, extract_FAST, extract_corners
 
 '''
 Test dataset should have 7172 total images
@@ -48,7 +48,7 @@ Labels: map each letter to int, shape: (N,)
 
 If preproc is not None, then each image is preprocessed (e.g. feature extraction)
 '''
-def load_data(path, preproc=None):
+def load_data(path, preproc=None, gray=False):
 
     data = []
     labels = []
@@ -60,12 +60,23 @@ def load_data(path, preproc=None):
         files = os.listdir(os.path.join(path, char))
         for f in files:
             img = cv2.imread(os.path.join(path, char, f))
+            if gray and len(img.shape) > 2:
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             if preproc is None: # just use flattened image as feature 
                 data.append(img.flatten()) 
             else:               # use some kind of feature extraction 
                 if preproc == "hog":
                     preproc_img = extract_HOG(img)
+                    data.append(preproc_img)
+                elif preproc == "orb":
+                    orb_kp, orb_des = extract_ORB(img)
+                    data.append((orb_kp, orb_des))
+                elif preproc == "corners":
+                    preproc_img = extract_corners(img)
+                    data.append(preproc_img)
+                elif preproc == "fast":
+                    preproc_img = extract_FAST(img)
                     data.append(preproc_img)
            
             labels.append(map_char_to_num[char]) 
@@ -98,4 +109,19 @@ def load_data_files(path):
 
     return data, labels
 
-load_data('dataset/Test', preproc="hog")
+
+def save_features(data, name, path):
+    if not path.endswith("/") and len(path) > 0:
+        fi = path + "/" + name + ".npy"
+    else:
+        fi = path + name + ".npy"
+
+    with open(fi, "wb") as f:
+        np.save(f, data)
+    print("Data saved at " + fi)
+
+
+
+
+
+# load_data('dataset/Test', preproc="hog")
