@@ -38,13 +38,19 @@ tsne = TSNE(n_components=2, random_state=0)
 X_2d = tsne.fit_transform(X)
 
 
-colors = 'b', 'g', 'r', 'c', 'm', 'y', 'k', 'w', 'lightcoral', 'cyan', 'sienna', 'palegreen', 
-'indigo', 'aquamarine', 'lime', 'cornflowerblue', 'thistle', 'plum', 'pink', 
-'slategray', 'peru', 'salmon', 'lightyellow', 'darkseagreen', 'forestgreen'
+colors = 'b', 'g', 'r', 'c', 'm', 'y', 'aqua', 'azure', 'beige', 'black',
+'sienna', 'chocolate', 'palegreen', 
+'indigo', 'chartreuse', 'indigo', 'khaki', 'lightblue', 
+'olive', 'maroon', 'orchid', 'pink', 'plum', 'navy'
+# 'lavender', 'lightgreen'
 
-plt.figure(figsize=(6, 5))
+plt.figure(figsize=(8,6))
 for i, c, label in zip(map_char_to_num.values(), colors,  map_char_to_num.keys()):
     plt.scatter(X_2d[y == i, 0], X_2d[y == i, 1], c=c, label=label)
 plt.title('t-SNE on ASL Test Dataset')
 plt.legend()
+# plt.subplots_adjust(bottom=0.7)
+
+plt.tight_layout()
+
 plt.show()
