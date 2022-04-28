@@ -1,6 +1,6 @@
 
 '''
-Convolutional Neural Network for ASL Classification 
+MLP for ASL Classification 
 
 '''
 import torch
@@ -34,23 +34,22 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=5)
+        self.fc1 = nn.Linear(28*28, 256)
         self.relu1 = nn.ReLU()
-        self.maxpool1 = nn.MaxPool2d(kernel_size=2)
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5)
+        self.fc2 = nn.Linear(256, 128)
         self.relu2 = nn.ReLU()
-        self.maxpool2 = nn.MaxPool2d(kernel_size=2)
-        self.fc1 = nn.Linear(32 * 4 * 4, 24)
-    
+        self.fc3 = nn.Linear(128,64)
+        self.relu3 = nn.ReLU()
+        self.fc4 = nn.Linear(64,24)
+
     def forward(self, x):
-        x = self.conv1(x)
+        x = self.fc1(x)
         x = self.relu1(x)
-        x = self.maxpool1(x)
-        x = self.conv2(x)
+        x = self.fc2(x)
         x = self.relu2(x) 
-        x = self.maxpool2(x)
-        x = x.view(x.size(0), -1)
-        out = self.fc1(x)
+        x = self.fc3(x)
+        x = self.relu3(x) 
+        out = self.fc4(x)
         
         return out
 
@@ -74,9 +73,8 @@ for epoch in range(num_epochs):
 
     for i, (x, y) in enumerate(train_loader):
 
-        # print('x', x.shape, 'y', y.shape)
         optimizer.zero_grad()
-        output = net(x)
+        output = net(x.view(-1,28*28))
         loss = criterion(output, y)
         writer.add_scalar("Loss/train", loss, epoch)
         loss.backward()
@@ -94,7 +92,7 @@ with torch.no_grad():
      n_correct = 0
      n_samples = 0
      for i, (x, y) in enumerate(test_loader):
-         output = net(x)
+         output = net(x.view(-1,28*28))
          _, predicted = torch.max(output.data, 1)
          n_samples += y.size(0)
          n_correct += (predicted == y).sum().item() 
@@ -107,12 +105,12 @@ print(f'Test accuracy: {acc} %')
 ''' Show image and predicted/ground truth class'''
 plt.imshow(x.view(28,28,1))
 plt.show()
-pred_idx = torch.argmax(net(x)[0])
+pred_idx = torch.argmax(net(x.view(-1,28*28))[0])
 print('ground truth letter', classes[int(y)])
 print('predicted letter', classes[int(pred_idx)])
 
 
 
-torch.save(net.state_dict(), MODEL_DIR+f'cnn1.pt')
+torch.save(net.state_dict(), MODEL_DIR+f'mlp.pt')
 writer.close()
 

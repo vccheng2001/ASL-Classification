@@ -2,13 +2,14 @@
 ''' Decision Tree/Random Forest Classifier '''
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+
+
 import sys
 sys.path.insert(0,'../')
 from dataloader import load_data
 
 # X: array-like of shape (n_samples, n_features)
 # y: array-like of shape (n_samples,)
-
 
 print("Loading dataset...")
 
