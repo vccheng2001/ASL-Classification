@@ -2,6 +2,7 @@
 ''' Decision Tree/Random Forest Classifier '''
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 import sys
@@ -29,6 +30,12 @@ print('Fitting to training data')
 clf.fit(train_x, train_y)
 
 print("Predict on test data")
-predicted = clf.predict(test_x)
+pred_y = clf.predict(test_x)
 
-print("Accuracy: ", accuracy_score(test_y, predicted))
+print("Accuracy: ", accuracy_score(test_y, pred_y))
+
+print('Confusion matrix:')
+print(confusion_matrix(test_y, pred_y))
+from sklearn.metrics import plot_confusion_matrix
+plot_confusion_matrix(clf, test_x, test_y)
+print(classification_report(test_y, pred_y))
