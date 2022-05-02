@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter()
 
-
+# maps index->letter
 classes = 'ABCDEFGHIKLMNOPQRSTUVWXY'
 
 DATA_DIR = '../dataset/'
@@ -30,6 +30,8 @@ test_loader = torch.utils.data.DataLoader(test_set, shuffle=True)
 
 
 
+# Define MLP network:
+# 3 Linear Layers followed by ReLU
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -58,6 +60,7 @@ net = Net()
 ''' RETRAIN '''
 # net = torch.load(MODEL_DIR + 'model.pt')
 
+# Define loss function and optimizer 
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(net.parameters(), lr=0.01)
 num_epochs = 5
@@ -71,12 +74,16 @@ for epoch in range(num_epochs):
     print(f'**** epoch {epoch} ******')
     net.train()
 
+    # loop through training data 
     for i, (x, y) in enumerate(train_loader):
 
         optimizer.zero_grad()
+        # forward pass through model 
         output = net(x.view(-1,28*28))
+        # calculate loss
         loss = criterion(output, y)
         writer.add_scalar("Loss/train", loss, epoch)
+        # Backptop 
         loss.backward()
         optimizer.step()
 
@@ -84,6 +91,7 @@ for epoch in range(num_epochs):
             print (f'Epoch [{epoch+1}/{num_epochs}], Step[{i+1}/{n_total_steps}], Loss: {loss.item():.4f}') 
 
 
+# for keeping track of test accuracy 
 correct = 0
 total = 0
 
@@ -92,7 +100,9 @@ with torch.no_grad():
      n_correct = 0
      n_samples = 0
      for i, (x, y) in enumerate(test_loader):
+         # forward pass 
          output = net(x.view(-1,28*28))
+         # predicted class 
          _, predicted = torch.max(output.data, 1)
          n_samples += y.size(0)
          n_correct += (predicted == y).sum().item() 
@@ -109,8 +119,7 @@ pred_idx = torch.argmax(net(x.view(-1,28*28))[0])
 print('ground truth letter', classes[int(y)])
 print('predicted letter', classes[int(pred_idx)])
 
-
-
+# save model 
 torch.save(net.state_dict(), MODEL_DIR+f'mlp.pt')
 writer.close()
 

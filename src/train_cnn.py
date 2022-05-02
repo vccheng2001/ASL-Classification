@@ -29,7 +29,7 @@ test_set = datasets.ImageFolder(root=DATA_DIR +'Test/',transform=transform)
 test_loader = torch.utils.data.DataLoader(test_set, shuffle=True)
 
 
-
+# Define Model: Series of Conv/Relu/Maxpool followed by Final Linear 
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -74,11 +74,13 @@ for epoch in range(num_epochs):
 
     for i, (x, y) in enumerate(train_loader):
 
-        # print('x', x.shape, 'y', y.shape)
         optimizer.zero_grad()
+        # forward pass 
         output = net(x)
+        # calculate loss 
         loss = criterion(output, y)
         writer.add_scalar("Loss/train", loss, epoch)
+        # backprop 
         loss.backward()
         optimizer.step()
 
@@ -86,6 +88,7 @@ for epoch in range(num_epochs):
             print (f'Epoch [{epoch+1}/{num_epochs}], Step[{i+1}/{n_total_steps}], Loss: {loss.item():.4f}') 
 
 
+# keep track of test accuracy 
 correct = 0
 total = 0
 
