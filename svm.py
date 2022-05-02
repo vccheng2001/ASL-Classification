@@ -120,10 +120,11 @@ def main():
         print("Average time taken: ", (nTime - sTime) / args.unit_test)
         test_set_labels = test_labels[test_idx]
         for i in range(test_set.shape[0]):
-            print("True label: ", test_set_labels[i])
-            print("Pred Label: ", pred_label[i])
-            plt.imshow(np.reshape(test_set[i, :], (28, 28)))
-            plt.show()
+            if test_set_labels[i] != pred_label[i]: 
+                print("True label: ", test_set_labels[i])
+                print("Pred Label: ", pred_label[i])
+                plt.imshow(np.reshape(test_set[i, :], (28, 28)), cmap='gray')
+                plt.show()
 
 
 

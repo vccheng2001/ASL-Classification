@@ -5,6 +5,11 @@ import dataloader
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 import pickle
+import cv2 as cv
+import preprocess
+from skimage import data, exposure
+from skimage.io import imread
+from skimage.feature import hog
 import time
 
 def main():
@@ -74,11 +79,21 @@ def main():
         nTime = time.perf_counter()
         print("Average time taken: ", (nTime - sTime)/args.unit_test)
         test_set_labels = test_labels[test_idx]
-        for i in range(test_set.shape[0]):
+        '''for i in range(test_set.shape[0]):
             print("True label: ", test_set_labels[i])
             print("Pred Label: ", pred_label[i])
-            plt.imshow(np.reshape(test_set[i, :], (28, 28)))
+            currIm = np.reshape(test_set[i, :], (78, 78))
+            currIm = exposure.rescale_intensity(currIm, in_range=(0, 10))
+            plt.imshow(currIm.T, cmap='gray')
             plt.show()
+        im = cv.imread("../data/Test/V/958_V.jpg")
+        print(im.shape)
+        # im = np.linalg.norm(im, axis=2)
+        _, hog_image = hog(im, orientations=9, pixels_per_cell=(8, 8), cells_per_block=(2, 2), visualize=True, multichannel=True)
+        # hog = preprocess.extract_HOG(im)
+        # print(hog_image)
+        plt.imshow(hog_image, cmap='gray')
+        plt.show()'''
     else:
         test_pred = knn.predict(test_imgs)
 
