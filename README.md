@@ -22,6 +22,13 @@ We use the [Hand Sign Images](https://www.kaggle.com/datasets/ash2703/handsignim
 
 
 ## Feature Extraction
-
+1. KMeans Clustering (kmeans.py)
+2. t-SNE (tsne.py)
+3. PCA (pca.py)
+4. Standard CV features (preprocess.py)
 
 ## Classification
+
+0. MLP (src/train_mlp.py)
+1. CNN (src/train_cnn.py)
+2. Random Forest (src/train_rf.py)
