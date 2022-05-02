@@ -60,8 +60,8 @@ def load_data(path, preproc=None, gray=False):
         files = os.listdir(os.path.join(path, char))
         for f in files:
             img = cv2.imread(os.path.join(path, char, f))
-            # if gray and len(img.shape) > 2:
-            #     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            if gray and len(img.shape) > 2:
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             if preproc is None: # just use flattened image as feature 
                 data.append(img.flatten()) 
